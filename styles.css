@@ -6,3 +6,92 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+.gantt-md-wrapper {
+	width: 100%;
+	overflow-x: auto;
+  }
+  
+  .gantt-md-container {
+	padding: 10px 0 50px;
+	position: relative;
+  }
+  
+  .gantt-md-container-background {
+	position: absolute;
+	background-color: var(--tab-container-background);
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+  }
+  
+  .gantt-md-container-background-scale {
+	position: absolute;
+	display: flex;
+	justify-content: start;
+	align-items: end;
+	width: 100px;
+	height: 100%;
+	border-left: 1px solid var(--leaflet-borders);
+  }
+  
+  .gantt-md-container-background-scale-text {
+	padding: 5px 0 0;
+	background-color: var(--tab-container-background);
+	color: var(--nav-item-color);
+    font-size: var(--nav-item-size);
+    font-weight: var(--nav-item-weight);
+    line-height: var(--line-height-tight);
+	margin-left: -1px;
+  }
+  
+  .gantt-md-container-item {
+	position: relative;
+	cursor: pointer;
+	background-color: grey;
+	border-radius: 4px;
+	padding: 10px;
+	margin: 10px 0;
+	overflow: visible;
+  }
+  
+  .gantt-md-container-item-title {
+	color: var(--inline-title-color);
+	white-space: nowrap;
+  }
+  
+  .green {
+	background-color: rgb(79, 154, 80);
+  }
+  
+  .red {
+	background-color: rgb(154, 92, 79);
+  }
+  
+  .blue {
+	background-color: rgb(79, 108, 154);
+  }
+
+  .faded-03 {
+	opacity: .3;
+  }
+  
+  .gantt-md-container-periods {
+	margin-top: -10px;
+	width: 100%;
+  }
+  
+  .gantt-md-container-period {
+	width: 100%;
+	display: flex;
+	flex: 0 0 100%;
+  }
+  
+  .gantt-md-container-period-item {
+	position: relative;
+	padding: 10px;
+	color: var(--inline-title-color);
+  }

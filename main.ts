@@ -1,7 +1,7 @@
 import {Editor, MarkdownView, Plugin} from 'obsidian';
 import {GanttSettingsTab} from 'src/classes/gantt-settings-tab.class';
 import {DEFAULT_EDITOR_BLOCK, DEFAULT_SETTINGS} from 'src/constants';
-import {drawContainerBackground, drawEvents, drawPeriods, drawWrapper, getFilesCollection, parseOptions} from 'src/helpers';
+import {drawContainerBackground, drawEvents, drawPeriods, drawWrapper, filterDates, getFilesCollection, parseOptions} from 'src/helpers';
 import {GanttOptions, MyPluginSettings} from 'src/interfaces';
 
 export default class GanttPlugin extends Plugin {
@@ -57,7 +57,7 @@ export default class GanttPlugin extends Plugin {
     }
 
     generateHtmlContent(opts: GanttOptions): string {
-        const links = getFilesCollection(this.app, opts.path);
+        const links = getFilesCollection(this.app, opts.path).filter(link => filterDates(link, opts));
         let result = '';
 
         result += drawContainerBackground(opts);

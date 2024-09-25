@@ -1,5 +1,5 @@
 import {App} from 'obsidian';
-import {GanttFileMeta} from 'src/interfaces';
+import {GanttFileMeta, GanttOptions} from 'src/interfaces';
 
 export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
     const files = app.vault.getMarkdownFiles();
@@ -27,5 +27,13 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
     });
     // console.log(result);
     return result;
+};
+
+export const filterDates = (link: GanttFileMeta, opts: GanttOptions): boolean => {
+    if (Number(link.year.start) > Number(opts.periodTo) || Number(link.year.start) < Number(opts.periodFrom) || Number(link.year.end) < Number(opts.periodFrom)) {
+        return false;
+    }
+
+    return true;
 };
 

@@ -1,5 +1,6 @@
 import {App} from 'obsidian';
 import {GanttFileMeta, GanttOptions} from 'src/interfaces';
+import {getGroupedItems} from './collection.helper';
 import {formatBC} from './format.helper';
 import {getContainerCells, getContainerVirtualWidth, getItemPercentMargin, getItemPercentWidth} from './math.helper';
 
@@ -31,7 +32,7 @@ export const drawContainerBackground = (opts: GanttOptions): string => {
 
         if (i === cells.length - 1) {
             result += `
-    		<div class="gantt-md-container-background-scale" style="left: 100%">
+    		<div class="gantt-md-container-background-scale" style="left: calc(100% - 1px)">
     			<div class="gantt-md-container-background-scale-text">
     			${formatBC(cells[i].end, false)}
     			</div>
@@ -78,25 +79,34 @@ export const drawEvents = (opts: GanttOptions, links: GanttFileMeta[], app: App)
 
     result += `<div class="gantt-md-container-items">`;
 
-    links.forEach((link: GanttFileMeta) => {
-        if (link.year.start === undefined || link.year.end === undefined) {
-            return;
-        }
+    const sortedLinks = getGroupedItems(links, opts);
 
-        const width = getContainerVirtualWidth(opts);
-        const itemWidth = getItemPercentWidth(link.year.start, link.year.end, width);
-        const margin = getItemPercentMargin(opts, link.year.start);
+    sortedLinks.forEach((l: GanttFileMeta[]) => {
+        result += `<div class="gantt-md-container-item-container">`;
 
-        result += `
-			<div
-            class="gantt-md-container-item"
-            style="width: ${itemWidth}%; margin-left: ${margin}%; background-color: ${link.color}"
-			onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
-          	>
-            	<div class="gantt-md-container-item-title">${link.name}</div>
-            	<div class="gantt-md-container-item-subtitle">${formatBC(link.year.start)} - ${formatBC(link.year.end)}</div>
-          	</div>
-			`;
+        l.forEach((link: GanttFileMeta) => {
+            if (link.year.start === undefined || link.year.end === undefined) {
+                return;
+            }
+
+            const width = getContainerVirtualWidth(opts);
+            const itemWidth = getItemPercentWidth(link.year.start, link.year.end, width);
+            const margin = getItemPercentMargin(opts, link.year.start);
+
+            result += `
+				<div
+				class="gantt-md-container-item"
+				style="width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}"
+				onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
+				title="${link.name}"  
+				>
+					<div class="gantt-md-container-item-title">${link.name}</div>
+					<div class="gantt-md-container-item-subtitle">${formatBC(link.year.start)} - ${formatBC(link.year.end)}</div>
+				  </div>
+				`;
+        });
+
+        result += `</div>`;
     });
 
     result += `</div>`;

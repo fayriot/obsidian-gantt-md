@@ -15,6 +15,7 @@ If your plugin does not need CSS, delete this file.
   .gantt-md-container {
 	padding: 10px 0 50px;
 	position: relative;
+	overflow: hidden;
   }
   
   .gantt-md-container-background {
@@ -47,15 +48,21 @@ If your plugin does not need CSS, delete this file.
     line-height: var(--line-height-tight);
 	margin-left: -1px;
   }
+
+  .gantt-md-container-item-container {
+	position: relative;
+	height: 49px;
+	width: 100%;
+  }
   
   .gantt-md-container-item {
-	position: relative;
+	position: absolute;
 	cursor: pointer;
 	background-color: grey;
 	border-radius: 4px;
-	padding: 10px;
-	margin: 10px 0;
+	padding: 4px;
 	overflow: visible;
+	top: 4px;
   }
 
   .gantt-md-container-item-title,

@@ -26,7 +26,7 @@ export interface GanttFileMeta {
 }
 
 export interface GanttPeriod {
-    start?: string;
+    start: string;
     end?: string;
 }
 

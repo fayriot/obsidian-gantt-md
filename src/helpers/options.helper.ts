@@ -13,7 +13,7 @@ export const parseOptions = (options: string): GanttOptions => {
         .filter((opt: ParsedOptions) => !!opt)
         .reduce((obj, item: ParsedOptions) => Object.assign(obj, {[item.key]: item.value.trim()}), {});
 
-    const periods: GanttOptionsPeriod[] = [];
+    const periods: GanttOptionsPeriod[][] = [];
 
     Object.keys(optsArr).forEach((key: string) => {
         if (key.match(/^([p0-9]+)$/)) {

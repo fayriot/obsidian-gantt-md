@@ -15,6 +15,8 @@ export const getContainerVirtualWidth = (opts: GanttOptions): number => {
     if (start < 0 && end > 0) {
         return Math.abs(start) + end;
     }
+
+    return 0;
 };
 
 export const getContainerCells = (opts: GanttOptions, cellSize: number): any[] => {

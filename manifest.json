@@ -1,7 +1,7 @@
 {
 	"id": "@fayriot/obsidian-gantt-md",
 	"name": "Gantt.md",
-	"version": "0.0.1",
+	"version": "0.0.1-1",
 	"minAppVersion": "0.15.0",
 	"description": "Generates a Gantt chart based on markdown files content & metadata dates",
 	"author": "fayriot",

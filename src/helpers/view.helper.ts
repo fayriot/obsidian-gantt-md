@@ -1,7 +1,7 @@
 import {App} from 'obsidian';
 import {GanttFileMeta, GanttOptions} from 'src/interfaces';
 import {getGroupedItems} from './collection.helper';
-import {formatBC} from './format.helper';
+import {formatDate} from './format.helper';
 import {getContainerCells, getContainerVirtualWidth, getItemPercentMargin, getItemPercentWidth} from './math.helper';
 
 export const drawWrapper = (opts: GanttOptions, htmlContent: string): HTMLDivElement => {
@@ -15,7 +15,7 @@ export const drawWrapper = (opts: GanttOptions, htmlContent: string): HTMLDivEle
 
 export const drawContainerBackground = (opts: GanttOptions): string => {
     let result = '';
-    const cells = getContainerCells(opts, 500);
+    const cells = getContainerCells(opts, opts.tick ? (opts.type === 'dates' ? Number(opts.tick + '' + '0101') : opts.tick) : 1000);
 
     result += `<div class="gantt-md-container-background">`;
 
@@ -25,7 +25,7 @@ export const drawContainerBackground = (opts: GanttOptions): string => {
         result += `
     		<div class="gantt-md-container-background-scale" style="left: ${margin}%">
     			<div class="gantt-md-container-background-scale-text">
-    			${formatBC(cells[i].start, false)}
+    			${formatDate(cells[i].start, false, opts.type, true)}
     			</div>
     		</div>
     		`;
@@ -34,7 +34,7 @@ export const drawContainerBackground = (opts: GanttOptions): string => {
             result += `
     		<div class="gantt-md-container-background-scale" style="left: calc(100% - 1px)">
     			<div class="gantt-md-container-background-scale-text">
-    			${formatBC(cells[i].end, false)}
+    			${formatDate(cells[i].end, false, opts.type, true)}
     			</div>
     		</div>
     		`;
@@ -60,9 +60,9 @@ export const drawPeriods = (opts: GanttOptions): string => {
 
         for (const item of period) {
             const width = getContainerVirtualWidth(opts);
-            const itemWidth = getItemPercentWidth(item.start, item.end, width);
+            const itemWidth = getItemPercentWidth(opts.type === 'dates' ? item.start.split('-').join('') : item.start, opts.type === 'dates' ? item.end.split('-').join('') : item.end, width);
             result += `
-					<div class="gantt-md-container-period-item" style="width: ${itemWidth}%">${item.title}</div>
+					<div class="gantt-md-container-period-item" style="width: ${itemWidth}%; background-color: ${item.color}">${item.title}</div>
 					`;
         }
 
@@ -96,12 +96,12 @@ export const drawEvents = (opts: GanttOptions, links: GanttFileMeta[], app: App)
             result += `
 				<div
 				class="gantt-md-container-item"
-				style="width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}"
+				style="width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}; color: ${link.colorText}"
 				onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
 				title="${link.name}"  
 				>
 					<div class="gantt-md-container-item-title">${link.name}</div>
-					<div class="gantt-md-container-item-subtitle">${formatBC(link.year.start)} - ${formatBC(link.year.end)}</div>
+					<div class="gantt-md-container-item-subtitle">${formatDate(link.displayDate.start, false, opts.type)} - ${formatDate(link.displayDate.end, false, opts.type)}</div>
 				  </div>
 				`;
         });

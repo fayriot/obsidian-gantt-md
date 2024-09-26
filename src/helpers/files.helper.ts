@@ -14,15 +14,16 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
         result.push({
             name: file.basename,
             path: file.path,
-            date: {
-                start: metadata?.frontmatter?.dateFrom,
-                end: metadata?.frontmatter?.dateTo,
+            displayDate: {
+                start: metadata?.frontmatter?.yearStart ?? metadata?.frontmatter?.dateStart,
+                end: metadata?.frontmatter?.yearEnd ?? metadata?.frontmatter?.dateEnd,
             },
             year: {
-                start: metadata?.frontmatter?.relDateFrom,
-                end: metadata?.frontmatter?.relDateTo,
+                start: metadata?.frontmatter?.yearStart ?? metadata?.frontmatter?.dateStart.split('-').join(''),
+                end: metadata?.frontmatter?.yearEnd ?? metadata?.frontmatter?.dateEnd.split('-').join(''),
             },
             color: metadata?.frontmatter?.color,
+            colorText: metadata?.frontmatter?.colorText ?? 'var(--inline-title-color)',
         });
     });
     // console.log(result);
@@ -30,7 +31,7 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
 };
 
 export const filterDates = (link: GanttFileMeta, opts: GanttOptions): boolean => {
-    if (Number(link.year.start) > Number(opts.periodTo) || Number(link.year.start) < Number(opts.periodFrom) || Number(link.year.end) < Number(opts.periodFrom)) {
+    if (Number(link.year.start) > Number(opts.end) || Number(link.year.start) < Number(opts.start) || Number(link.year.end) < Number(opts.start)) {
         return false;
     }
 

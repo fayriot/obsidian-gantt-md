@@ -3,7 +3,7 @@ import {GanttOptions, GanttOptionsPeriod, ParsedOptions} from 'src/interfaces';
 export const parseOptions = (options: string): GanttOptions => {
     const parsedOptions = options.split('\n');
 
-    const optsArr: GanttOptions = parsedOptions
+    const optsArr: any = parsedOptions
         .map((opt: string) => {
             const [key, value] = opt.split(':');
             if (!!key && !!value) {
@@ -24,6 +24,7 @@ export const parseOptions = (options: string): GanttOptions => {
                     title: r[0].trim(),
                     start: r[1].trim(),
                     end: r[2].trim(),
+                    color: r[3] ? r[3].trim() : '#939190',
                 };
             });
 
@@ -31,13 +32,26 @@ export const parseOptions = (options: string): GanttOptions => {
 
             delete optsArr[key];
         } else {
-            optsArr[key] = key === 'path' ? optsArr[key] : Number(optsArr[key]);
+            if (key === 'path' || key === 'type') {
+                return;
+            }
+
+            if (key === 'start' || key === 'end') {
+                if (optsArr.type === 'dates') {
+                    optsArr[key] = Number(optsArr[key].split('-').join(''));
+                    return;
+                }
+                optsArr[key] = Number(optsArr[key]);
+                return;
+            }
+
+            optsArr[key] = Number(optsArr[key]);
         }
     });
 
     const result = {...optsArr, periods: periods};
 
-    console.log(result);
+    // console.log(result);
 
     return result;
 };

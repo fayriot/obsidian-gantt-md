@@ -58,7 +58,7 @@ If your plugin does not need CSS, delete this file.
   .gantt-md-container-item {
 	position: absolute;
 	cursor: pointer;
-	background-color: grey;
+	background-color: #939190;
 	border-radius: 4px;
 	padding: 4px;
 	overflow: visible;
@@ -97,6 +97,7 @@ If your plugin does not need CSS, delete this file.
 	width: 100%;
 	display: flex;
 	flex: 0 0 100%;
+	margin: 0 0 2px;
   }
   
   .gantt-md-container-period-item {
@@ -104,12 +105,4 @@ If your plugin does not need CSS, delete this file.
 	padding: 10px;
 	color: var(--inline-title-color);
 	font-size: var(--font-adaptive-smallest);
-  }
-  
-  .gantt-md-container-period-item:nth-child(odd) {	
-	background-color: rgb(79, 108, 154);
-  }
-
-  .gantt-md-container-period-item:nth-child(even) {	
-	background-color: rgb(154, 92, 79);
   }

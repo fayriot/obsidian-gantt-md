@@ -1,44 +1,42 @@
 import {Editor, MarkdownView, Plugin} from 'obsidian';
+import {GanttModal} from 'src/classes/gantt-modal-tab.class';
 import {GanttSettingsTab} from 'src/classes/gantt-settings-tab.class';
-import {DEFAULT_EDITOR_BLOCK, DEFAULT_SETTINGS} from 'src/constants';
+import {DEFAULT_SETTINGS} from 'src/constants';
+import {DEFAULT_EDITOR_BLOCK_DATES, DEFAULT_EDITOR_BLOCK_YEARS} from 'src/constants/editor.constants';
+import {GANTT_MODAL_RIBBON_ICON} from 'src/constants/modal.constants';
 import {drawContainerBackground, drawEvents, drawPeriods, drawWrapper, filterDates, getFilesCollection, parseOptions} from 'src/helpers';
-import {GanttOptions, MyPluginSettings} from 'src/interfaces';
+import {GanttOptions, GanttPluginSettings} from 'src/interfaces';
 
 export default class GanttPlugin extends Plugin {
-    settings: MyPluginSettings;
+    settings: GanttPluginSettings;
 
     async onload() {
         await this.loadSettings();
 
-        // This creates an icon in the left ribbon.
-        // const ribbonIconEl = this.addRibbonIcon('dice', 'Gantt.md', (evt: MouseEvent) => {
-        //     new Notice('This is a notice!');
-        // });
-        // ribbonIconEl.addClass('gantt-md-ribbon-class');
+        const ribbonIconEl = this.addRibbonIcon('chart-gantt', 'Gantt.md', (evt: MouseEvent) => {
+            new GanttModal(this.app).open();
+        });
+        ribbonIconEl.innerHTML = GANTT_MODAL_RIBBON_ICON;
 
-        // This adds an editor command that can perform some operation on the current editor instance
         this.addCommand({
-            id: 'gantt-md-insert-command',
-            name: 'Insert',
+            id: 'gantt-md-insert-years-command',
+            name: 'Insert, Years format',
             editorCallback: (editor: Editor, view: MarkdownView) => {
                 console.log(editor.getSelection());
-                editor.replaceSelection(DEFAULT_EDITOR_BLOCK);
+                editor.replaceSelection(DEFAULT_EDITOR_BLOCK_YEARS);
             },
         });
 
-        // This adds a settings tab so the user can configure various aspects of the plugin
+        this.addCommand({
+            id: 'gantt-md-insert-dates-command',
+            name: 'Insert, Dates format',
+            editorCallback: (editor: Editor, view: MarkdownView) => {
+                console.log(editor.getSelection());
+                editor.replaceSelection(DEFAULT_EDITOR_BLOCK_DATES);
+            },
+        });
+
         this.addSettingTab(new GanttSettingsTab(this.app, this));
-
-        // this.registerDomEvent(document, 'click', async (evt: MouseEvent) => {
-        // 	console.log('click', evt);
-        // });
-
-        // When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-        // this.registerInterval(window.setInterval(() => console.log('setInterval'), 30 * 1000));
-
-        //-----------
-
-        // this.createNoteLinks();
 
         this.registerMarkdownPostProcessor((element, context) => {
             const codeBlocks = element.querySelectorAll('pre');

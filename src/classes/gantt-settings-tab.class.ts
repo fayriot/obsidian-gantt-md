@@ -1,28 +1,31 @@
-import GanttPlugin from "main";
-import { App, PluginSettingTab, Setting } from "obsidian";
+import GanttPlugin from 'main';
+import {App, PluginSettingTab, Setting} from 'obsidian';
 
 export class GanttSettingsTab extends PluginSettingTab {
-	plugin: GanttPlugin;
+    plugin: GanttPlugin;
 
-	constructor(app: App, plugin: GanttPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
+    constructor(app: App, plugin: GanttPlugin) {
+        super(app, plugin);
+        this.plugin = plugin;
+    }
 
-	display(): void {
-		const {containerEl} = this;
+    display(): void {
+        const {containerEl} = this;
 
-		containerEl.empty();
+        containerEl.empty();
 
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
-	}
+        new Setting(containerEl)
+            .setName('Title')
+            .setDesc('Description')
+            .addText(text =>
+                text
+                    .setPlaceholder('Enter value')
+                    .setValue(this.plugin.settings.setting)
+                    .onChange(async value => {
+                        this.plugin.settings.setting = value;
+                        await this.plugin.saveSettings();
+                    }),
+            );
+    }
 }
+

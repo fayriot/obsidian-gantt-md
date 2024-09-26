@@ -1,7 +1,7 @@
 import {GanttFileMeta, GanttOptions} from 'src/interfaces';
 
 export const getGroupedItems = (links: GanttFileMeta[], opts: GanttOptions): any[] => {
-    const end = Number(opts.periodTo);
+    const end = Number(opts.end);
     const result: any[] = [];
     const preparedArr = [...links];
 

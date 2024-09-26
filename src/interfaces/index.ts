@@ -4,9 +4,12 @@ export interface ParsedOptions {
 }
 
 export interface GanttOptions {
+    type?: 'dates' | 'years';
+    path: string;
     width?: number;
-    periodFrom?: number;
-    periodTo?: number;
+    start?: number;
+    end?: number;
+    tick?: number;
     periods?: GanttOptionsPeriod[][];
     [k: string]: any;
 }
@@ -15,14 +18,16 @@ export interface GanttOptionsPeriod {
     title: string;
     start: string;
     end: string;
+    color: string;
 }
 
 export interface GanttFileMeta {
     name: string;
     path: string;
-    date: GanttPeriod;
+    displayDate: GanttPeriod;
     year: GanttPeriod;
     color?: string;
+    colorText?: string;
 }
 
 export interface GanttPeriod {
@@ -30,7 +35,7 @@ export interface GanttPeriod {
     end?: string;
 }
 
-export interface MyPluginSettings {
-    mySetting: string;
+export interface GanttPluginSettings {
+    setting: string;
 }
 

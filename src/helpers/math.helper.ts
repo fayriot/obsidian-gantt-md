@@ -1,8 +1,8 @@
 import {GanttOptions} from 'src/interfaces';
 
 export const getContainerVirtualWidth = (opts: GanttOptions): number => {
-    const start = Number(opts.periodFrom);
-    const end = Number(opts.periodTo);
+    const start = Number(opts.start);
+    const end = Number(opts.end);
 
     if (start < 0 && end <= 0) {
         return start - end;
@@ -20,8 +20,8 @@ export const getContainerVirtualWidth = (opts: GanttOptions): number => {
 };
 
 export const getContainerCells = (opts: GanttOptions, cellSize: number): any[] => {
-    const start = Number(opts.periodFrom);
-    const end = Number(opts.periodTo);
+    const start = Number(opts.start);
+    const end = Number(opts.end);
     const cells = [];
 
     for (let i = start; i < end; i += cellSize) {
@@ -40,7 +40,7 @@ export const getItemPercentMargin = (opts: GanttOptions, start: string): number 
     let size = 0;
     let idx = 0;
 
-    for (let i = Number(opts.periodFrom); i < Number(opts.periodTo); i++) {
+    for (let i = Number(opts.start); i < Number(opts.end); i++) {
         size++;
 
         if (i === Number(start)) {

@@ -5,7 +5,7 @@ export const getGroupedItems = (links: GanttFileMeta[], opts: GanttOptions): any
     const result: any[] = [];
     const preparedArr = [...links];
 
-    preparedArr.sort((a, b) => (a.year.start > b.year.start ? 1 : -1));
+    preparedArr.sort((a, b) => (a.date.start! > b.date.start! ? 1 : -1));
     groupItems(preparedArr, end, result);
 
     return result;
@@ -21,7 +21,7 @@ const groupItems = (preparedArr: GanttFileMeta[], end: number, result: any): voi
             return;
         }
 
-        const found = a.filter((e: any) => Number(e.year.end) > Number(link.year.start));
+        const found = a.filter((e: any) => Number(e.date.end) > Number(link.date.start));
 
         if (!found.length) {
             a.push(link);

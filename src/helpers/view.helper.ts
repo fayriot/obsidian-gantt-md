@@ -85,23 +85,22 @@ export const drawEvents = (opts: GanttOptions, links: GanttFileMeta[], app: App)
         result += `<div class="gantt-md-container-item-container">`;
 
         l.forEach((link: GanttFileMeta) => {
-            if (link.year.start === undefined || link.year.end === undefined) {
+            if (link.date.start === undefined || link.date.end === undefined) {
                 return;
             }
 
             const width = getContainerVirtualWidth(opts);
-            const itemWidth = getItemPercentWidth(link.year.start, link.year.end, width);
-            const margin = getItemPercentMargin(opts, link.year.start);
+            const itemWidth = getItemPercentWidth(link.date.start, link.date.end, width);
+            const margin = getItemPercentMargin(opts, link.date.start);
 
             result += `
 				<div
 				class="gantt-md-container-item"
 				style="width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}; color: ${link.colorText}"
 				onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
-				title="${link.name}"  
 				>
-					<div class="gantt-md-container-item-title">${link.name}</div>
-					<div class="gantt-md-container-item-subtitle">${formatDate(link.displayDate.start, false, opts.type)} - ${formatDate(link.displayDate.end, false, opts.type)}</div>
+					<div class="gantt-md-container-item-title">${drawTitle(link, opts)}</div>
+					<div class="gantt-md-container-item-subtitle">${drawSubtitle(link, opts)}</div>
 				  </div>
 				`;
         });
@@ -112,5 +111,17 @@ export const drawEvents = (opts: GanttOptions, links: GanttFileMeta[], app: App)
     result += `</div>`;
 
     return result;
+};
+
+const drawTitle = (link: GanttFileMeta, opts: GanttOptions): string => {
+    return link.displayName ?? link.name; //todo hide from config
+};
+
+const drawSubtitle = (link: GanttFileMeta, opts: GanttOptions): string => {
+    if (link.displayDuration) {
+        return link.displayDuration; //todo hide from config
+    }
+
+    return `${formatDate(link.displayDate.start, false, opts.type)} - ${formatDate(link.displayDate.end, false, opts.type)}`;
 };
 

@@ -5,7 +5,7 @@ import {DEFAULT_SETTINGS} from 'src/constants';
 import {DEFAULT_EDITOR_BLOCK_DATES, DEFAULT_EDITOR_BLOCK_YEARS} from 'src/constants/editor.constants';
 import {GANTT_MODAL_RIBBON_ICON} from 'src/constants/modal.constants';
 import {drawContainerBackground, drawEvents, drawPeriods, drawWrapper, filterDates, getFilesCollection, parseOptions} from 'src/helpers';
-import {GanttOptions, GanttPluginSettings} from 'src/interfaces';
+import {GanttOptions, GanttPluginSettings, InputFileMetaType} from 'src/interfaces';
 
 export default class GanttPlugin extends Plugin {
     settings: GanttPluginSettings;
@@ -56,11 +56,15 @@ export default class GanttPlugin extends Plugin {
 
     generateHtmlContent(opts: GanttOptions): string {
         const links = getFilesCollection(this.app, opts.path).filter(link => filterDates(link, opts));
+        const events = links.filter(link => link.type === InputFileMetaType.EVENT);
+        const periods = links.filter(link => link.type === InputFileMetaType.PERIOD);
+        const subperiods = links.filter(link => link.type === InputFileMetaType.SUBPERIOD);
         let result = '';
 
         result += drawContainerBackground(opts);
-        result += drawPeriods(opts);
-        result += drawEvents(opts, links, this.app);
+        result += drawPeriods(opts, periods, this.app);
+        result += drawPeriods(opts, subperiods, this.app);
+        result += drawEvents(opts, events, this.app);
 
         return result;
     }

@@ -41,11 +41,13 @@ export const getItemPercentMargin = (opts: GanttOptions, start: string): number 
     let idx = 0;
 
     for (let i = Number(opts.start); i < Number(opts.end); i++) {
-        size++;
+        // size++;
 
         if (i === Number(start)) {
             idx = size;
         }
+
+        size++;
     }
 
     return (idx / size) * 100;

@@ -46,7 +46,10 @@ export const drawContainerBackground = (opts: GanttOptions): string => {
     return result;
 };
 
-export const drawPeriods = (opts: GanttOptions): string => {
+/**
+ * @deprecated
+ */
+export const drawPeriodsOld = (opts: GanttOptions): string => {
     let result = '';
 
     if (!opts.periods?.length) {
@@ -68,6 +71,63 @@ export const drawPeriods = (opts: GanttOptions): string => {
 
         result += `</div>`;
     }
+
+    result += `</div>`;
+
+    return result;
+};
+
+export const drawPeriods = (opts: GanttOptions, periods: GanttFileMeta[], app: App): string => {
+    let result = '';
+
+    if (!periods.length) {
+        return result;
+    }
+
+    result += `<div class="gantt-md-container-periods">`;
+
+    const sortedLinks = getGroupedItems(periods, opts);
+
+    sortedLinks.forEach((l: GanttFileMeta[]) => {
+        result += `<div class="gantt-md-container-item-container">`;
+
+        l.forEach((link: GanttFileMeta) => {
+            if (link.date.start === undefined || link.date.end === undefined) {
+                return;
+            }
+
+            const width = getContainerVirtualWidth(opts);
+            const itemWidth = getItemPercentWidth(link.date.start, link.date.end, width);
+            const margin = getItemPercentMargin(opts, link.date.start);
+
+            result += `
+				<div
+				class="gantt-md-container-item"
+				style="width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}; color: ${link.colorText}"
+				onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
+				>
+					<div class="gantt-md-container-item-title">${drawTitle(link, opts)}</div>
+					<div class="gantt-md-container-item-subtitle">${drawSubtitle(link, opts)}</div>
+				  </div>
+				`;
+        });
+
+        result += `</div>`;
+    });
+
+    // for (const period of opts.periods) {
+    //     result += `<div class="gantt-md-container-period">`;
+
+    //     for (const item of period) {
+    //         const width = getContainerVirtualWidth(opts);
+    //         const itemWidth = getItemPercentWidth(opts.type === 'dates' ? item.start.split('-').join('') : item.start, opts.type === 'dates' ? item.end.split('-').join('') : item.end, width);
+    //         result += `
+    // 				<div class="gantt-md-container-period-item" style="width: ${itemWidth}%; background-color: ${item.color}">${item.title}</div>
+    // 				`;
+    //     }
+
+    //     result += `</div>`;
+    // }
 
     result += `</div>`;
 

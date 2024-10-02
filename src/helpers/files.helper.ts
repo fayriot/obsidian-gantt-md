@@ -21,7 +21,7 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
             type: metadata?.frontmatter?.type,
         });
     });
-    console.log(result);
+
     return result;
 };
 
@@ -68,7 +68,7 @@ const prepareDateString = (y?: number, m?: number, d?: number): string | null =>
             if (typeof arg === 'number') {
                 if (i !== 0 && arg.toString().length > 2) {
                     console.warn('Wrong MM or DD format');
-                    throw new Error('Wrong MM or DD format'); //todo pass error
+                    throw new Error('Wrong MM or DD format'); //todo cleanup
                 }
 
                 if (arg.toString().length === 1) {
@@ -77,7 +77,7 @@ const prepareDateString = (y?: number, m?: number, d?: number): string | null =>
                     result += arg;
                 }
             } else {
-                result += ''; //todo optimize
+                result += '';
             }
 
             i++;

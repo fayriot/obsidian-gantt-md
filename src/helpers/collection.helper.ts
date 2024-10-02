@@ -14,8 +14,6 @@ export const getGroupedItems = (links: GanttFileMeta[], opts: GanttOptions): any
 const groupItems = (preparedArr: GanttFileMeta[], end: number, result: any): void => {
     const startLength = preparedArr.length;
 
-    console.log(preparedArr);
-
     group(preparedArr, end, result, startLength);
 };
 

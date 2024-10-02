@@ -3,15 +3,12 @@ export const DEFAULT_EDITOR_BLOCK_YEARS =
     `
 gantt-md
 
-path: d/files
+path: path/to/files
 
 width: 2000
 start: -8000
 end: 0
 tick: 500
-
-p1: Период 1, -8000, -7000, #54626F; Период 2, -7000, -5000, #3B4957; Период 3, -5000, -3000, #6D7E7B; Период 4, -3000, 0, #841515
-p2: Еще один период 1, -8000, -5000; Еще один период 2, -5000, 0
 ` +
     '```';
 
@@ -21,15 +18,36 @@ export const DEFAULT_EDITOR_BLOCK_DATES =
 gantt-md
 
 type: dates
-path: d/даты
+path: path/to/files
 
 width: 1000
 start: 500-01-01
 end: 1200-01-01
 tick: 100
-
-p1: Период 1, 500-01-01, 600-01-01, #54626F; Период 2, 600-01-01, 800-01-01, #3B4957; Период 3, 800-01-01, 1000-01-01, #6D7E7B; Период 4, 1000-01-01, 1200-01-01, #841515
-p2: Еще один период 1, 500-01-01, 950-01-01; Еще один период 2, 950-01-01, 1200-01-01
 ` +
     '```';
+
+export const DEFAULT_NOTE_EXAMPLE = `---
+date:
+  dateY: 2000
+  dateY_end: 2001
+  dateM: 01
+  dateM_end: 01
+  dateD: 01
+  dateD_end: 25
+type: event
+
+dateString: event name
+dateStringDuration: 2000-01-01 - 2001-01-25
+
+color: #76923c
+colorText: #fff
+---
+
+This is example note with gantt chart. 
+
+\`\`\`
+type: 'period' | 'subperiod' | 'event',
+\`\`\`
+`;
 

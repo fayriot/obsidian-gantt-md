@@ -1,9 +1,7 @@
 import {Editor, MarkdownView, Plugin} from 'obsidian';
-import {GanttModal} from 'src/classes/gantt-modal-tab.class';
 import {GanttSettingsTab} from 'src/classes/gantt-settings-tab.class';
-import {DEFAULT_SETTINGS} from 'src/constants';
-import {DEFAULT_EDITOR_BLOCK_DATES, DEFAULT_EDITOR_BLOCK_YEARS} from 'src/constants/editor.constants';
-import {GANTT_MODAL_RIBBON_ICON} from 'src/constants/modal.constants';
+import {DEFAULT_SETTINGS, GANTT_RIBBON_ICON} from 'src/constants';
+import {DEFAULT_EDITOR_BLOCK_DATES, DEFAULT_EDITOR_BLOCK_YEARS, DEFAULT_NOTE_EXAMPLE} from 'src/constants/editor.constants';
 import {drawContainerBackground, drawEvents, drawPeriods, drawWrapper, filterDates, getFilesCollection, parseOptions} from 'src/helpers';
 import {GanttOptions, GanttPluginSettings, InputFileMetaTypeEnum} from 'src/interfaces';
 
@@ -13,10 +11,10 @@ export default class GanttPlugin extends Plugin {
     async onload() {
         await this.loadSettings();
 
-        const ribbonIconEl = this.addRibbonIcon('chart-gantt', 'Gantt.md', (evt: MouseEvent) => {
-            new GanttModal(this.app).open();
+        const ribbonIconEl = this.addRibbonIcon('chart-gantt', 'Gantt.md, create note', (evt: MouseEvent) => {
+            this.createNoteWithCode();
         });
-        ribbonIconEl.innerHTML = GANTT_MODAL_RIBBON_ICON;
+        ribbonIconEl.innerHTML = GANTT_RIBBON_ICON;
 
         this.addCommand({
             id: 'gantt-md-insert-years-command',
@@ -76,6 +74,15 @@ export default class GanttPlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
+    }
+
+    async createNoteWithCode() {
+        const codeContent = DEFAULT_NOTE_EXAMPLE;
+        const filename = 'New Note ' + new Date().toISOString().split('.')[0].replace(/:/g, '-') + '.md';
+        const file = await this.app.vault.create(filename, codeContent);
+        const leaf = this.app.workspace.getLeaf(false); // open in the current tab
+
+        leaf.openFile(file);
     }
 }
 

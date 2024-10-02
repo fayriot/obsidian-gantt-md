@@ -4,27 +4,13 @@ export interface ParsedOptions {
 }
 
 export interface GanttOptions {
-    /**
-     * @deprecated
-     */
-    type?: 'dates' | 'years';
+    type?: GanttOptionsTypeEnum;
     path: string;
     width?: number;
     start?: number;
     end?: number;
     tick?: number;
-    /**
-     * @deprecated
-     */
-    periods?: GanttOptionsPeriod[][];
     [k: string]: any;
-}
-
-export interface GanttOptionsPeriod {
-    title: string;
-    start: string;
-    end: string;
-    color: string;
 }
 
 export interface GanttFileMeta {
@@ -47,7 +33,7 @@ export interface GanttFileMeta {
     /**
      * Item type
      */
-    type: InputFileMetaType;
+    type: InputFileMetaTypeEnum;
     /**
      * Item color
      */
@@ -73,7 +59,7 @@ export interface GanttPeriod {
 }
 
 export interface GanttPluginSettings {
-    setting: string;
+    maxTicks: string;
 }
 
 export interface InputFileMeta {
@@ -81,7 +67,7 @@ export interface InputFileMeta {
     dateString?: string;
     dateDuration?: number;
     dateStringDuration?: string;
-    type?: InputFileMetaType;
+    type?: InputFileMetaTypeEnum;
     color?: string;
     colorText?: string;
 }
@@ -95,9 +81,14 @@ export interface InputFileMetaDate {
     dateD_end?: number;
 }
 
-export enum InputFileMetaType {
+export enum InputFileMetaTypeEnum {
     PERIOD = 'period',
     SUBPERIOD = 'subperiod',
     EVENT = 'event',
+}
+
+export enum GanttOptionsTypeEnum {
+    DATES = 'dates',
+    YEARS = 'years',
 }
 

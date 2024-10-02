@@ -1,4 +1,4 @@
-import {App, FrontMatterCache, TFile} from 'obsidian';
+import {App, FrontMatterCache, Notice, TFile} from 'obsidian';
 import {GanttFileMeta, GanttOptions, GanttPeriod} from 'src/interfaces';
 
 export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
@@ -7,21 +7,13 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
     const result: any = [];
 
     sortedFiles.forEach(file => {
-        // console.log(file);
-        // const content = this.app.vault.cachedRead(file);
         const metadata = app.metadataCache.getFileCache(file);
-        console.log(metadata);
-        // console.log(metadata);
         result.push({
             name: file.basename,
             path: file.path,
-            // year: {
-            //     start: metadata?.frontmatter?.yearStart ?? metadata?.frontmatter?.dateStart.split('-').join(''),
-            //     end: metadata?.frontmatter?.yearEnd ?? metadata?.frontmatter?.dateEnd.split('-').join(''),
-            // },
             date: convertDate(metadata?.frontmatter),
             color: metadata?.frontmatter?.color,
-            colorText: metadata?.frontmatter?.colorText ?? 'var(--inline-title-color)',
+            colorText: metadata?.frontmatter?.colorText ?? 'var(--inline-title-color)', // todo fix
             displayDate: prepareDisplayDate(metadata?.frontmatter),
             displayName: metadata?.frontmatter?.dateString,
             displayDuration: metadata?.frontmatter?.dateStringDuration,
@@ -78,7 +70,12 @@ const prepareDateString = (y?: number, m?: number, d?: number): string | null =>
                     console.warn('Wrong MM or DD format');
                     throw new Error('Wrong MM or DD format'); //todo pass error
                 }
-                result += arg;
+
+                if (arg.toString().length === 1) {
+                    result += '0' + arg;
+                } else {
+                    result += arg;
+                }
             } else {
                 result += ''; //todo optimize
             }
@@ -88,6 +85,7 @@ const prepareDateString = (y?: number, m?: number, d?: number): string | null =>
 
         return result;
     } catch (e) {
+        new Notice('Wrong MM or DD format');
         return null;
     }
 };
@@ -97,12 +95,26 @@ const prepareDisplayDate = (f?: FrontMatterCache): GanttPeriod | null => {
         return null;
     }
 
-    const start = `${f.date?.dateY ? f.date.dateY : ''}${f.date?.dateM ? '-' + f.date.dateM : ''}${f.date?.dateD ? '-' + f.date.dateD : ''}`;
-    const end = `${f.date?.dateY_end ? f.date.dateY_end : ''}${f.date?.dateM_end ? '-' + f.date.dateM_end : ''}${f.date?.dateD_end ? '-' + f.date.dateD_end : ''}`;
+    const start = `${formatYMD(f.date.dateY)}${formatYMD(f.date?.dateM, '-', true)}${formatYMD(f.date?.dateD, '-', true)}`;
+    const end = `${formatYMD(f.date.dateY_end)}${formatYMD(f.date?.dateM_end, '-', true)}${formatYMD(f.date?.dateD_end, '-', true)}`;
 
     return {
         start,
         end,
     };
+};
+
+const formatYMD = (v: any, prefix = '', addZero?: boolean): string => {
+    if (typeof v === 'number') {
+        if (addZero) {
+            if (v.toString().length === 1) {
+                return prefix + '0' + v;
+            }
+        }
+
+        return prefix + v.toString();
+    } else {
+        return '';
+    }
 };
 

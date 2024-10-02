@@ -1,24 +1,15 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
-
 .gantt-md-wrapper {
 	width: 100%;
 	overflow-x: auto;
-  }
-  
-  .gantt-md-container {
-	padding: 10px 0 50px;
+}
+
+.gantt-md-container {
+	padding: 0 0 40px;
 	position: relative;
 	overflow: hidden;
-  }
-  
-  .gantt-md-container-background {
+}
+
+.gantt-md-container-background {
 	position: absolute;
 	background-color: var(--tab-container-background);
 	top: 0;
@@ -27,9 +18,9 @@ If your plugin does not need CSS, delete this file.
 	right: 0;
 	width: 100%;
 	height: 100%;
-  }
-  
-  .gantt-md-container-background-scale {
+}
+
+.gantt-md-container-background-scale {
 	position: absolute;
 	display: flex;
 	justify-content: start;
@@ -37,72 +28,85 @@ If your plugin does not need CSS, delete this file.
 	width: 100px;
 	height: 100%;
 	border-left: 1px solid var(--leaflet-borders);
-  }
-  
-  .gantt-md-container-background-scale-text {
+}
+
+.gantt-md-container-background-scale-text {
 	padding: 5px 0 0;
 	background-color: var(--tab-container-background);
 	color: var(--nav-item-color);
-    font-size: var(--nav-item-size);
-    font-weight: var(--nav-item-weight);
-    line-height: var(--line-height-tight);
+	font-size: var(--nav-item-size);
+	font-weight: var(--nav-item-weight);
+	line-height: var(--line-height-tight);
 	margin-left: -1px;
-  }
+}
 
-  .gantt-md-container-item-container {
+.gantt-md-container-item-container {
 	position: relative;
 	height: 49px;
 	width: 100%;
-  }
-  
-  .gantt-md-container-item {
+}
+
+.gantt-md-container-item {
 	position: absolute;
 	cursor: pointer;
 	background-color: #939190;
 	border-radius: 4px;
 	padding: 4px;
-	overflow: visible;
-	top: 4px;
-  }
+	/* height: 49px; */
+	/* top: 4px; */
+	overflow: hidden;
+}
 
-  .gantt-md-container-item-title,
-  .gantt-md-container-item-subtitle {
+.gantt-md-container-item-shadow {
+	content: ' ';
+	position: absolute;
+	/* box-shadow: inset -15px 0 9px -7px rgba(0,0,0,0.4); */
+	border-radius: 4px;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 100%;
+	overflow: hidden;
+}
+
+.gantt-md-container-item:hover {
+	z-index: 10;
+	width: auto !important;
+	box-shadow: 1px 0 6px 0px rgba(0,0,0,0.2);
+}
+
+.gantt-md-container-item:hover .gantt-md-container-item-shadow {
+	width: 0;
+}
+
+.gantt-md-container-item-title,
+.gantt-md-container-item-subtitle {
 	color: var(--inline-title-color);
 	font-size: var(--font-adaptive-smallest);
 	white-space: nowrap;
-  }
-  
-  .green {
-	background-color: rgb(79, 154, 80);
-  }
-  
-  .red {
-	background-color: rgb(154, 92, 79);
-  }
-  
-  .blue {
-	background-color: rgb(79, 108, 154);
-  }
+}
 
-  .faded-03 {
+.green {
+	background-color: rgb(79, 154, 80);
+}
+
+.red {
+	background-color: rgb(154, 92, 79);
+}
+
+.blue {
+	background-color: rgb(79, 108, 154);
+}
+
+.faded-03 {
 	opacity: .3;
-  }
-  
-  .gantt-md-container-periods {
-	margin-top: -10px;
+}
+
+.gantt-md-container-periods {
 	width: 100%;
-  }
-  
-  .gantt-md-container-period {
-	width: 100%;
-	display: flex;
-	flex: 0 0 100%;
-	margin: 0 0 2px;
-  }
-  
-  .gantt-md-container-period-item {
-	position: relative;
-	padding: 10px;
-	color: var(--inline-title-color);
-	font-size: var(--font-adaptive-smallest);
-  }
+}
+
+.gantt-md-container-periods .gantt-md-container-item,
+.gantt-md-container-periods .gantt-md-container-item-shadow {
+	border-radius: 0;
+}

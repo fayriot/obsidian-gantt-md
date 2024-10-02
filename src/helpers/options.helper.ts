@@ -1,4 +1,7 @@
-import {GanttOptions, GanttOptionsPeriod, ParsedOptions} from 'src/interfaces';
+import {Notice} from 'obsidian';
+import {GanttOptions, ParsedOptions} from 'src/interfaces';
+
+const REQUIRED_KEYS = ['tick', 'path', 'width', 'start', 'end'];
 
 export const parseOptions = (options: string): GanttOptions => {
     const parsedOptions = options.split('\n');
@@ -13,45 +16,32 @@ export const parseOptions = (options: string): GanttOptions => {
         .filter((opt: ParsedOptions) => !!opt)
         .reduce((obj, item: ParsedOptions) => Object.assign(obj, {[item.key]: item.value.trim()}), {});
 
-    const periods: GanttOptionsPeriod[][] = [];
-
-    Object.keys(optsArr).forEach((key: string) => {
-        if (key.match(/^([p0-9]+)$/)) {
-            const p = optsArr[key].split(';');
-            const x = p.map((item: string) => {
-                const r = item.split(',');
-                return {
-                    title: r[0].trim(),
-                    start: r[1].trim(),
-                    end: r[2].trim(),
-                    color: r[3] ? r[3].trim() : '#939190',
-                };
-            });
-
-            periods.push(x);
-
-            delete optsArr[key];
-        } else {
-            if (key === 'path' || key === 'type') {
-                return;
-            }
-
-            if (key === 'start' || key === 'end') {
-                if (optsArr.type === 'dates') {
-                    optsArr[key] = Number(optsArr[key].split('-').join(''));
-                    return;
-                }
-                optsArr[key] = Number(optsArr[key]);
-                return;
-            }
-
-            optsArr[key] = Number(optsArr[key]);
+    REQUIRED_KEYS.forEach(key => {
+        if (!Object.keys(optsArr).find(k => k === key)) {
+            new Notice(`Gantt.md: Missing required option: ${key}`);
+            throw new Error(`Missing required option: ${key}`);
         }
     });
 
-    const result = {...optsArr, periods: periods};
+    Object.keys(optsArr).forEach((key: string) => {
+        if (key === 'path' || key === 'type') {
+            return;
+        }
 
-    // console.log(result);
+        if (key === 'start' || key === 'end') {
+            let prefix = '';
+            if (optsArr[key].startsWith('-')) {
+                prefix = '-';
+            }
+
+            optsArr[key] = Number(prefix + optsArr[key].split('-').join(''));
+            return;
+        }
+
+        optsArr[key] = Number(optsArr[key]);
+    });
+
+    const result = {...optsArr};
 
     return result;
 };

@@ -15,14 +15,14 @@ export class GanttSettingsTab extends PluginSettingTab {
         containerEl.empty();
 
         new Setting(containerEl)
-            .setName('Title')
-            .setDesc('Description')
+            .setName('Max Ticks')
+            .setDesc('Maximum ticks. If generated ticks exceed this value, their number will be adjusted to this value. Large values may cause performance issues.')
             .addText(text =>
                 text
                     .setPlaceholder('Enter value')
-                    .setValue(this.plugin.settings.setting)
+                    .setValue(this.plugin.settings.maxTicks)
                     .onChange(async value => {
-                        this.plugin.settings.setting = value;
+                        this.plugin.settings.maxTicks = value;
                         await this.plugin.saveSettings();
                     }),
             );

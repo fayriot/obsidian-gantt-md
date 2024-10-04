@@ -46,8 +46,8 @@ const convertDate = (f?: FrontMatterCache): GanttPeriod | null => {
         return null;
     }
 
-    const start = prepareDateString(f.date.dateY, f.date.dateM, f.date.dateD);
-    const end = prepareDateString(f.date.dateY_end, f.date.dateM_end, f.date.dateD_end);
+    const start = prepareDateString(f.date?.dateY, f.date?.dateM, f.date?.dateD);
+    const end = prepareDateString(f.date?.dateY_end, f.date?.dateM_end, f.date?.dateD_end);
 
     if (!start || !end) {
         return null;
@@ -95,8 +95,8 @@ const prepareDisplayDate = (f?: FrontMatterCache): GanttPeriod | null => {
         return null;
     }
 
-    const start = `${formatYMD(f.date.dateY)}${formatYMD(f.date?.dateM, '-', true)}${formatYMD(f.date?.dateD, '-', true)}`;
-    const end = `${formatYMD(f.date.dateY_end)}${formatYMD(f.date?.dateM_end, '-', true)}${formatYMD(f.date?.dateD_end, '-', true)}`;
+    const start = `${formatYMD(f.date?.dateY)}${formatYMD(f.date?.dateM, '-', true)}${formatYMD(f.date?.dateD, '-', true)}`;
+    const end = `${formatYMD(f.date?.dateY_end)}${formatYMD(f.date?.dateM_end, '-', true)}${formatYMD(f.date?.dateD_end, '-', true)}`;
 
     return {
         start,

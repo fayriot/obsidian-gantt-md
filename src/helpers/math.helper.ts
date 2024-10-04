@@ -5,15 +5,15 @@ export const getContainerVirtualWidth = (opts: GanttOptions): number => {
     const start = Number(opts.start);
     const end = Number(opts.end);
 
-    if (start < 0 && end <= 0) {
+    if (start < 0 && end < 0) {
         return start - end;
     }
 
-    if (start >= 0 && end > 0) {
+    if (start >= 0 && end >= 0) {
         return end - start;
     }
 
-    if (start < 0 && end > 0) {
+    if (start < 0 && end >= 0) {
         return Math.abs(start) + end;
     }
 

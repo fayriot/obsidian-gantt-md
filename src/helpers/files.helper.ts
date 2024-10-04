@@ -1,9 +1,9 @@
 import {App, FrontMatterCache, Notice, TFile} from 'obsidian';
-import {GanttFileMeta, GanttOptions, GanttPeriod} from 'src/interfaces';
+import {GanttFileMeta, GanttFileMetaDateBeyondEnum, GanttOptions, GanttPeriod} from 'src/interfaces';
 
-export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
+export const getFilesCollection = (app: App, opts: GanttOptions): GanttFileMeta[] => {
     const files = app.vault.getMarkdownFiles();
-    const sortedFiles = files.filter(file => filesFilter(file, path));
+    const sortedFiles = files.filter(file => filesFilter(file, opts.path));
     const result: any = [];
 
     sortedFiles.forEach(file => {
@@ -11,7 +11,7 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
         result.push({
             name: file.basename,
             path: file.path,
-            date: convertDate(metadata?.frontmatter),
+            date: convertDate(metadata?.frontmatter, opts),
             color: metadata?.frontmatter?.color,
             colorText: metadata?.frontmatter?.colorText ?? 'var(--inline-title-color)', // todo fix
             displayDate: prepareDisplayDate(metadata?.frontmatter),
@@ -22,6 +22,7 @@ export const getFilesCollection = (app: App, path: string): GanttFileMeta[] => {
         });
     });
 
+    console.log(result);
     return result;
 };
 
@@ -30,7 +31,7 @@ export const filterDates = (link: GanttFileMeta, opts: GanttOptions): boolean =>
         return false;
     }
 
-    if (Number(link.date.start) > Number(opts.end) || Number(link.date.start) < Number(opts.start) || Number(link.date.end) < Number(opts.start)) {
+    if (Number(link.date.start) > Number(opts.end) || Number(link.date.end) < Number(opts.start)) {
         return false;
     }
 
@@ -41,21 +42,43 @@ const filesFilter = (file: TFile, path: string): boolean => {
     return file.parent?.path === path;
 };
 
-const convertDate = (f?: FrontMatterCache): GanttPeriod | null => {
+const convertDate = (f: FrontMatterCache | undefined, opts: GanttOptions): GanttPeriod | null => {
     if (!f) {
         return null;
     }
 
-    const start = prepareDateString(f.date?.dateY, f.date?.dateM, f.date?.dateD);
-    const end = prepareDateString(f.date?.dateY_end, f.date?.dateM_end, f.date?.dateD_end);
+    let start = prepareDateString(f.date?.dateY, f.date?.dateM, f.date?.dateD);
+    let end = prepareDateString(f.date?.dateY_end, f.date?.dateM_end, f.date?.dateD_end);
+    let l,
+        r = false;
+    let beyond = GanttFileMetaDateBeyondEnum.NONE;
 
     if (!start || !end) {
         return null;
     }
 
+    if (typeof opts.start === 'number' && Number(start) < opts.start) {
+        start = Number(opts.start).toString();
+        l = true;
+    }
+
+    if (typeof opts.end === 'number' && Number(end) > opts.end) {
+        end = Number(opts.end).toString();
+        r = true;
+    }
+
+    if (l && r) {
+        beyond = GanttFileMetaDateBeyondEnum.BOTH;
+    } else if (l) {
+        beyond = GanttFileMetaDateBeyondEnum.LEFT;
+    } else if (r) {
+        beyond = GanttFileMetaDateBeyondEnum.RIGHT;
+    }
+
     return {
         start,
         end,
+        beyond,
     };
 };
 

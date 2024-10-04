@@ -1,5 +1,6 @@
 import {App} from 'obsidian';
-import {GanttFileMeta, GanttOptions, GanttOptionsTypeEnum, GanttPluginSettings} from 'src/interfaces';
+import {GANTT_RIBBON_ICON_LEFT, GANTT_RIBBON_ICON_RIGHT} from 'src/constants';
+import {GanttFileMeta, GanttFileMetaDateBeyondEnum, GanttOptions, GanttOptionsTypeEnum, GanttPluginSettings} from 'src/interfaces';
 import {getGroupedItems} from './collection.helper';
 import {formatDate} from './format.helper';
 import {getContainerCells, getContainerVirtualWidth, getItemPercentMargin, getItemPercentWidth} from './math.helper';
@@ -106,8 +107,19 @@ const drawItems = (sortedLinks: any[], opts: GanttOptions, app: App): string => 
 				style="min-width: ${itemWidth}%; width: ${itemWidth}%; left: ${margin}%; background-color: ${link.color}; color: ${link.colorText}"
 				onclick="window.open('obsidian://open?vault=${encodeURIComponent(app.vault.getName())}&file=${link.path}', '_self')"
 				>
-					<div class="gantt-md-container-item-title">${drawTitle(link, opts)}</div>
-					<div class="gantt-md-container-item-subtitle">${drawSubtitle(link, opts)}</div>
+					<div class="gantt-md-container-item-text">
+					<div class="gantt-md-container-item-arrow ${link.date.beyond === GanttFileMetaDateBeyondEnum.LEFT || link.date.beyond === GanttFileMetaDateBeyondEnum.BOTH ? 'gantt-md-visible' : 'gantt-md-hidden'}">
+						${GANTT_RIBBON_ICON_LEFT}
+					</div>
+					<div>
+						<div class="gantt-md-container-item-title">${drawTitle(link, opts)}</div>
+						<div class="gantt-md-container-item-subtitle">${drawSubtitle(link, opts)}</div>
+					</div>
+					</div>
+
+					<div class="gantt-md-container-item-arrow ${link.date.beyond === GanttFileMetaDateBeyondEnum.RIGHT || link.date.beyond === GanttFileMetaDateBeyondEnum.BOTH ? 'gantt-md-visible' : 'gantt-md-hidden'}">
+						${GANTT_RIBBON_ICON_RIGHT}
+					</div>
 					<div class="gantt-md-container-item-shadow" style="box-shadow: inset -15px 0 9px -7px ${link.color ?? '#939190'};"></div>
 				  </div>
 				`;

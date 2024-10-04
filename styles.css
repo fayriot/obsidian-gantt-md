@@ -55,6 +55,19 @@
 	/* height: 49px; */
 	/* top: 4px; */
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.gantt-md-container-item-arrow {
+	width: 24px;
+	height: 24px;
+}
+
+.gantt-md-container-item-text {
+	display: flex;
+	align-items: center;
 }
 
 .gantt-md-container-item-shadow {
@@ -109,4 +122,12 @@
 .gantt-md-container-periods .gantt-md-container-item,
 .gantt-md-container-periods .gantt-md-container-item-shadow {
 	border-radius: 0;
+}
+
+.gantt-md-visible {
+	display: block;
+}
+
+.gantt-md-hidden {
+	display: none;
 }

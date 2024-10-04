@@ -56,6 +56,7 @@ export interface GanttFileMeta {
 export interface GanttPeriod {
     start?: string;
     end?: string;
+    beyond?: GanttFileMetaDateBeyondEnum;
 }
 
 export interface GanttPluginSettings {
@@ -90,5 +91,12 @@ export enum InputFileMetaTypeEnum {
 export enum GanttOptionsTypeEnum {
     DATES = 'dates',
     YEARS = 'years',
+}
+
+export enum GanttFileMetaDateBeyondEnum {
+    LEFT = 'left',
+    RIGHT = 'right',
+    BOTH = 'both',
+    NONE = 'none',
 }
 

@@ -52,7 +52,7 @@ export default class GanttPlugin extends Plugin {
     }
 
     generateHtmlContent(opts: GanttOptions): string {
-        const links = getFilesCollection(this.app, opts.path).filter(link => filterDates(link, opts));
+        const links = getFilesCollection(this.app, opts).filter(link => filterDates(link, opts));
         const events = links.filter(link => link.type === InputFileMetaTypeEnum.EVENT);
         const periods = links.filter(link => link.type === InputFileMetaTypeEnum.PERIOD);
         const subperiods = links.filter(link => link.type === InputFileMetaTypeEnum.SUBPERIOD);
